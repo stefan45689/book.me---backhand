@@ -7,12 +7,12 @@ unitRouter.route('/')
                      .get(unitController.getAllUnits)
                      .post(unitController.addUnit)
 
-unitRouter.route('/:id')
-                      .get(unitController.getUnitByID)
-                      .put(unitController.updateUnit)
-                      .delete(unitController.deleteUnit)
-
 unitRouter.route('/search')
                       .get(unitController.searchUnits)
+
+unitRouter.route('/:id')
+    .get(unitController.getUnitByID)
+    .put(unitController.updateUnit)
+    .delete(unitController.deleteUnit)
 
 export default unitRouter;

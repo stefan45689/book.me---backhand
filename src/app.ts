@@ -7,13 +7,13 @@ import unitRouter from "./routers/unit-router";
 import reservationRouter from "./routers/reservation-router";
 import reviewRouter from "./routers/review-router";
 import userRouter from "./routers/user-router";
-import path from "path";
+//import path from "path";
 import fileRouter from "./file-upload";
 
 const app = express ();
 app.use(express.json());
 app.use(cors());
-//app.use(express.static(path.join(__dirname)))
+app.use(express.static('public'))
 
 app.use('/unit', unitRouter); 
 //app.use('/search', unitRouter)

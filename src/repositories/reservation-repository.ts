@@ -1,7 +1,6 @@
 import { values } from "lodash";
 import dbConnection from "../dbConnection";
-import { resolveSoa } from "dns";
-import { error } from "console";
+
 
 const getAllReservations = async () => {
     try {
@@ -25,28 +24,33 @@ const getReservationByUnitId =async (id: number) => {
 
 const checkAvailability =async (unit_id: number, start_date: Date, end_date: Date) => {
     try {
-        const [result] = await dbConnection.query(`select count (*) from Reservations where unit_id = ?
-                                              and not (end_date <= ? or start_date >= ?)`,
-                                              [unit_id, start_date, end_date]);
-        return result[0].count === 0;
+        const [result] = await dbConnection.query(`select exists (
+                                                   select 1 from reservations 
+                                                   where unit_id = ? 
+                                                   and not (end_date <= ? OR start_date >= ?)
+                                                   ) as available`,
+                                                   [unit_id, start_date, end_date]);
+        return result[0].available;
     }
-    catch {
-        return null;
+    catch (e: any) {
+        console.log("Error checking availability", e);
+        return { success: false, msg: e.message}
     }
 }
 
-const createNewReservation =async (unit_id: number,start_date: Date, end_date: Date, user_id: number) => {
+const createNewReservation =async (reservation: any) => {
     try {
-        const isAvailable = await checkAvailability(unit_id, start_date, end_date) 
+       /* const isAvailable = await checkAvailability(unit_id, start_date, end_date) 
          if (!isAvailable)  {
             throw new Error ('Unfortunately this property is not available for the selected dates')
          }  
-        else {
+        else {*/
+
             const result = await dbConnection.query(`Insert into Reservations (user_id, unit_id, start_date, end_date)
-                                                    values (?, ?, ?, ? , now(), now())`,
-                                                    [user_id, unit_id, start_date, end_date ])
+                                                    values (?, ?, ?, ?)`,
+                                                    [reservation.user_id, reservation.unit_id, reservation.start_date, reservation.end_date ])
          return result                                           
-        }
+       // }
     }
     catch (e: any){
         return { success: false, msg: e.message}

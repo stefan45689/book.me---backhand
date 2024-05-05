@@ -1,7 +1,5 @@
-import { Request, Response, urlencoded } from "express"; 
+import { Request, Response} from "express";
 import unitService from "../services/unit-service";
-import { parse } from "querystring";
-import { parseArgs } from "util";
 
 let data: any = [];
 
@@ -11,6 +9,8 @@ const getAllUnits = async (req: Request, res: Response) => {
 }
 
 const getUnitByID = async (req: Request, res: Response) => {
+    console.log("aaa")
+
     const id = parseInt(req.params.id);
     data = await unitService.getUnitByID(id);
     res.send(data);
@@ -34,10 +34,12 @@ const deleteUnit = async (req: Request, res: Response) => {
 }
 
 const searchUnits =async (req: Request, res: Response) => {
-    const startDate = new Date ();   
-    const endDate = new Date ();
-    const term = req.params.term;   
-    const noOfGuests = parseInt(req.params.noOfGuests)  
+    console.log("1231231231")
+
+    const startDate = new Date(req.query.startDate as string);   
+    const endDate = new Date(req.query.endDate as string);
+    const term = req.query.term as string;
+    const noOfGuests = parseInt(req.query.noOfGuests as string)
     data = await unitService.searchUnits(startDate, endDate, term, noOfGuests);
     res.send(data);
 }

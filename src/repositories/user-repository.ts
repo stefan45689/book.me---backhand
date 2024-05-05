@@ -5,7 +5,7 @@ const signUp = async (user: any) => {
     try {
         const result = await dbConnection.query(`insert into users (username, email, password, role, created, updated)
                                            values (?, ? , ? , ?, now(), now())`, 
-                                           [user.username, user.email, user.password, user.role]);
+                                           [user.username, user.email, user.password, user.role = 'user']);
         return result;
     }
     catch (e: any) {

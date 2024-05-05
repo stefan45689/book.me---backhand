@@ -1,5 +1,5 @@
 import multer from "multer";
-import express from "express";
+import express, { response } from "express";
 import { Request, Response } from "express";
 import path from "path";
 
@@ -21,7 +21,9 @@ limits: {
 
 const fileRouter = express.Router();
 
-fileRouter.post('upload', fileUpload.single(''), (req: Request, res: Response) => {
+fileRouter.route('/upload').
+    post( fileUpload.single('file'), (req: Request, res: Response) => {
+    console.log(req.body)
     try {
         return res.status(200).json("File uploaded successfully");
         } 
@@ -37,3 +39,20 @@ fileRouter.post('upload', fileUpload.single(''), (req: Request, res: Response) =
 });
 
 export default fileRouter;
+
+
+
+   /* if (!request.file) {
+        res.send({
+            status: -1,
+            msg: 'Problem uploading a file'
+        })
+    }
+    else {
+        res.send({
+            status: 0,
+            msg: 'File uploaded successfuly',
+            filename: request.file.filename
+        })
+    }  */
+    

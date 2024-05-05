@@ -10,7 +10,7 @@ const signUp = async (user: any) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
-            role: user.role,
+            role: 'user',
         }, 'SECRET');
         
         return { success: true, token}

@@ -42,8 +42,8 @@ const checkAvailability =async (unit_id: number, start_date: Date, end_date: Dat
     return result;
 }
 
-const createNewReservation = async (unit_id: number, start_date: Date, end_date: Date, user_id: number) => {
-    const result = await reservationRepository.createNewReservation(unit_id, start_date, end_date, user_id);
+const createNewReservation = async (reservation: any) => {
+    const result = await reservationRepository.createNewReservation(reservation);
     
         /*
         const result = ({
@@ -73,6 +73,7 @@ const deleteReservation = async (id: number) => {
     return false;
      
 }
+
 
 export default { getAllReservations, getReservationByUnitId, createNewReservation, 
                  checkAvailability,updateReservation, deleteReservation}
