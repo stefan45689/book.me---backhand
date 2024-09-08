@@ -1,3 +1,4 @@
+import { result } from "lodash";
 import userService from "../services/user-service";
 import { Request, Response } from "express";
 
@@ -10,4 +11,10 @@ const login = async (req: Request, res: Response) => {
     const result = await userService.login(req.body);
     res.send(result)
 }
-export default { signUp, login }
+
+const getUserById =async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const result = await userService.getUserById(id)
+    res.send(result);
+}
+export default { signUp, login, getUserById }

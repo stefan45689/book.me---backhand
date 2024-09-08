@@ -1,4 +1,5 @@
 import {DataSource} from 'typeorm';
+import { User } from '../models/User';
 
 const dbConnection = new DataSource ({
     type: 'mysql', 
@@ -6,7 +7,9 @@ const dbConnection = new DataSource ({
     port: 3306, 
     username: 'root', 
     password: '1456ksla7896.', 
-    database: 'book_me'
+    database: 'book_me',
+    entities: [User],
+    logging: "all"
 });
 
 export default  dbConnection;

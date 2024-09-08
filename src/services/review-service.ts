@@ -1,29 +1,25 @@
-import reviewRepository from "../repositories/review-repository";
+import { CommandFailedEvent } from "typeorm";
+import reviewRepo from "../repositories/review-repo";
 
-const getAllReviews = async () => {
-    const data = await reviewRepository.getAllReviews(); 
-    const result: any = []; 
+const getCommentsByUnitId = async (id:number) => {
+    const data = await reviewRepo.getCommentsByUnitId(id); 
+    if (data && data.length > 0) {
 
-    data.forEach((review: any) => {
-        result.push({
-            user_id: review.user_id, 
-            unit_id: review.unit_id,
-            rating: review.rating,
-            comment: review.comment,
-            updated: review.updated, 
-            created: review.created
-        });
-    })
-
-    return result; 
+        return data.map((row: any) => ({
+            comment: row.comment,
+            username: row.username
+        }))
+    }
+    else {
+       return [];
+    } 
 }
-
 const addNewReview = async (review: any) => {
-    const result = await reviewRepository.addNewReview(review); 
+    const result = await reviewRepo.addNewReview(review); 
     return result; 
 }
 
-const updateReview = async (id: number, review: any) => {
+/*const updateReview = async (id: number, review: any) => {
     const result = await reviewRepository.updateReview(id, review); 
     return result; 
 }
@@ -36,6 +32,6 @@ const deleteReview = async (id: number) => {
 
     return false;
      
-}
+}*/
 
-export default { getAllReviews, addNewReview, updateReview, deleteReview}
+export default { addNewReview, getCommentsByUnitId, /*updateReview, deleteReview*/}

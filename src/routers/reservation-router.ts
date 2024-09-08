@@ -12,7 +12,7 @@ reservationRouter.route('/:id')
                         .delete(reservationController.deleteReservation)
 
 reservationRouter.route('/get-by-unit/:id')
-                        .get(reservationController.getReservationByUnitId)
+                        .get(reservationController.getReservationByUserId)
 
 reservationRouter.route('/create-new')
                         .post(reservationController.createNewReservation)

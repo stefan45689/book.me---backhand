@@ -3,8 +3,10 @@ import { Request, Response } from "express";
 
 let data: any = [];
 
-const getAllReviews = async (req: Request, res: Response) => {
-    data = await reviewService.getAllReviews()
+
+const getCommentsByUnitId = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    data = await reviewService.getCommentsByUnitId(id);
     res.send(data);
 }
 
@@ -13,7 +15,7 @@ const addNewReview = async (req: Request, res: Response) => {
      res.send(data);
 }
 
-const updateReview = async (req: Request, res: Response) => {
+/*const updateReview = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     data = await reviewService.updateReview(req.body, id);
 }
@@ -23,5 +25,5 @@ const deleteReview = async (req: Request, res: Response) => {
     data = await reviewService.deleteReview(id);
     res.send(data);
 }
-
-export default { getAllReviews, addNewReview, updateReview,deleteReview}
+*/
+export default { addNewReview, getCommentsByUnitId,/*updateReview,deleteReview*/}

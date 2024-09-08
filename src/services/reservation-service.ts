@@ -8,9 +8,11 @@ const getAllReservations = async () => {
     data.forEach((reservation: any) => {
         result.push({
             user_id: reservation.user_id, 
+            user_username: reservation.user_username,
             unit_id: reservation.unit_id,
             start_date: reservation.start_date,
             end_date: reservation.end_date,
+            totalAmount: reservation.totalAmount,
             updated: reservation.updated, 
             created: reservation.created
         });
@@ -19,20 +21,25 @@ const getAllReservations = async () => {
     return result; 
 }
 
-const getReservationByUnitId = async (id:number) => {
-    const data = await reservationRepository.getReservationByUnitId(id); 
-      const  result: any = []
-            data.forEach((reservation: any) => {
-              result.push ({
-                user_id: reservation.user_id, 
-                unit_id: reservation.unit_id, 
-                start_date_id: reservation.start_date_id,
-                end_date_id: reservation.end_date_id, 
-                updated: reservation.updated, 
-                created: reservation.created 
-        }) 
-    return result;
+const getReservationByUserId = async (id:number) => {
+    const data = await reservationRepository.getReservationByUserId(id); 
+    let result: any = []
+    if (data && data.length > 0) {
+
+          data.forEach((reservation: any) => {
+          result.push ({ 
+            user_id: reservation.user_id, 
+            user_username: reservation.user_username,
+            unit_id: reservation.unit_id,
+            start_date: reservation.start_date,
+            end_date: reservation.end_date,
+            totalAmount: reservation.totalAmount,
+            updated: reservation.updated, 
+            created: reservation.created  
+        })
     })
+    return result;
+    }
 
     return null; 
 }
@@ -48,9 +55,11 @@ const createNewReservation = async (reservation: any) => {
         /*
         const result = ({
             user_id: data[0].user_id,
+            user_username: data[0].user_username,
             unit_id: data[0].unit_id,
             start_date: data[0].start_date,
             end_date: data[0].end_date,
+            totalAmount: data[0].totalAmount,
             created: date[0].created,
             updated: data[0].updated
         })
@@ -75,5 +84,6 @@ const deleteReservation = async (id: number) => {
 }
 
 
-export default { getAllReservations, getReservationByUnitId, createNewReservation, 
+export default { getAllReservations, getReservationByUserId, createNewReservation, 
                  checkAvailability,updateReservation, deleteReservation}
+

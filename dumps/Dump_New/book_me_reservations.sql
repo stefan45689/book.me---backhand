@@ -1,0 +1,64 @@
+CREATE DATABASE  IF NOT EXISTS `book_me` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `book_me`;
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: book_me
+-- ------------------------------------------------------
+-- Server version	8.0.33
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `reservations`
+--
+
+DROP TABLE IF EXISTS `reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reservations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL,
+  `unit_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `user_username` varchar(50) NOT NULL,
+  `totalAmount` double DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_unit_id` (`unit_id`),
+  KEY `fk_user_id` (`user_id`),
+  CONSTRAINT `fk_unit_id` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservations`
+--
+
+LOCK TABLES `reservations` WRITE;
+/*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
+INSERT INTO `reservations` VALUES (1,'2024-09-04 22:00:00','2024-09-11 22:00:00','2024-09-03 18:31:29','2024-09-03 18:31:29',1,28,'Thomas V.',350),(2,'2024-08-18 22:00:00','2024-08-23 22:00:00','2024-09-03 18:45:42','2024-09-03 18:45:42',1,27,'Sanja',250),(4,'2024-07-09 22:00:00','2024-07-15 22:00:00','2024-09-03 19:51:01','2024-09-03 19:51:01',1,26,'Miralem ',300),(5,'2024-08-09 22:00:00','2024-08-17 22:00:00','2024-09-03 19:59:16','2024-09-03 19:59:16',1,23,'Ana S.',400),(6,'2024-07-17 22:00:00','2024-07-23 22:00:00','2024-09-03 20:17:36','2024-09-03 20:17:36',1,24,'Joseph',300),(7,'2024-07-03 22:00:00','2024-07-10 22:00:00','2024-09-04 21:55:58','2024-09-04 21:55:58',10,21,'testUser168',1204),(8,'2024-07-18 22:00:00','2024-07-21 22:00:00','2024-09-04 21:58:19','2024-09-04 21:58:19',10,20,'test12',516),(9,'2024-09-05 22:00:00','2024-09-15 22:00:00','2024-09-04 21:59:57','2024-09-04 21:59:57',10,22,'test Angular',1720);
+/*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-09-08 18:22:04

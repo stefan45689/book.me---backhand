@@ -1,5 +1,6 @@
 import { values } from "lodash";
 import dbConnection from "../dbConnection";
+import { json } from "stream/consumers";
 
 
 const getAllReservations = async () => {
@@ -12,9 +13,14 @@ const getAllReservations = async () => {
     }
 }
 
-const getReservationByUnitId =async (id: number) => {
+const getReservationByUserId =async (id: number) => {
     try {
-        const result = await dbConnection.query(`select * from Reservations where id = ?`, [id])
+        const result = await dbConnection.query(`select r.*, u.user_id
+                                                 from reservations r
+                                                 JOIN units u ON r.unit_id = u.id
+                                                 where u.user_id = ?`, [id])
+        console.log('Reservations:', result)
+        //const plainResult = JSON.parse(JSON.stringify(result))
         return result
     }
     catch {
@@ -24,13 +30,20 @@ const getReservationByUnitId =async (id: number) => {
 
 const checkAvailability =async (unit_id: number, start_date: Date, end_date: Date) => {
     try {
-        const [result] = await dbConnection.query(`select exists (
+        const startDate = start_date.toISOString().slice(0, 19).replace('T', ' ');
+        const endDate = end_date.toISOString().slice(0, 19).replace('T', ' ');
+
+        const result = await dbConnection.query(`select exists (
                                                    select 1 from reservations 
                                                    where unit_id = ? 
-                                                   and not (end_date <= ? OR start_date >= ?)
+                                                   and not (end_date < ? OR start_date > ?)
                                                    ) as available`,
-                                                   [unit_id, start_date, end_date]);
-        return result[0].available;
+                                                   [unit_id, startDate, endDate]);
+        console.log(result)
+        if (result[0].available == 0 && result[0].available != undefined) 
+           return { success: true, available: true}
+        else
+           return { success: true, available: false}
     }
     catch (e: any) {
         console.log("Error checking availability", e);
@@ -40,17 +53,18 @@ const checkAvailability =async (unit_id: number, start_date: Date, end_date: Dat
 
 const createNewReservation =async (reservation: any) => {
     try {
-       /* const isAvailable = await checkAvailability(unit_id, start_date, end_date) 
+        const isAvailable = await checkAvailability 
          if (!isAvailable)  {
             throw new Error ('Unfortunately this property is not available for the selected dates')
          }  
-        else {*/
+        else {
 
-            const result = await dbConnection.query(`Insert into Reservations (user_id, unit_id, start_date, end_date)
-                                                    values (?, ?, ?, ?)`,
-                                                    [reservation.user_id, reservation.unit_id, reservation.start_date, reservation.end_date ])
-         return result                                           
-       // }
+            const result = await dbConnection.query(`Insert into Reservations (user_id, user_username, unit_id, start_date, end_date, totalAmount, created, updated)
+                                                    values (?, ?, ?, ?, ?, ?, now (), now ())`,
+                                                    [reservation.user_id, reservation.user_username, reservation.unit_id,
+                                                     reservation.start_date, reservation.end_date, reservation.totalAmount])                                            
+         return { success: true, data: result }                                       
+        }
     }
     catch (e: any){
         return { success: false, msg: e.message}
@@ -79,5 +93,5 @@ const deleteReservation =async (id: number) => {
     }
 }
 
-export default { getAllReservations, getReservationByUnitId, createNewReservation, 
+export default { getAllReservations, getReservationByUserId, createNewReservation, 
                  checkAvailability, updateReservation, deleteReservation}

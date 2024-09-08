@@ -25,4 +25,18 @@ const login =async (user: any) => {
         return { success: false, msg: e.message}
     }  
 }
-export default { signUp, login} ;
+
+const getUserById = async (id: number) => {
+    try {
+        console.log(`Fetching user with id: ${id}`)
+        const result = await dbConnection.query(`select * from Users where id = ?`, [id])
+ 
+        console.log(result)
+        return result;
+    }
+    catch (e: any) {
+        return null
+    }
+}
+
+export default { signUp, login, getUserById} ;

@@ -1,9 +1,14 @@
 //import { result } from "lodash";
 import unitRepository from "../repositories/unit-repository";
 
-const getAllUnits = async () => {
-    const data = await unitRepository.getAllUnits(); 
+const getAllUnits = async (page: number, pageSize: number) => {
+    const data = await unitRepository.getAllUnits(page, pageSize); 
     let result: any = []; 
+    const total = await unitRepository.getTotalCount();
+
+    if (!data || data.length == 0) {  
+        return [];
+    }
 
     data.forEach((unit: any) => {
         result.push({
@@ -15,12 +20,16 @@ const getAllUnits = async () => {
             image_path: unit.image_path,
             price: unit.price,
             noOfGuests: unit.noOfGuests,
+            amenities: unit.amenities,
+            user_id: unit.user_id,
+            latitude: unit.latitude,
+            longitude: unit.longitude,
             updated: unit.updated, 
             created: unit.created
         });
     })
 
-    return result; 
+    return {units: result, total}; 
 }
 
 const getUnitByID = async (id:number) => {
@@ -37,6 +46,10 @@ const getUnitByID = async (id:number) => {
             image_path: data[0].image_path,
             price: data[0].price,
             noOfGuests: data[0].noOfGuests,
+            amenities: data[0].amenities,
+            user_id: data[0].user_id,
+            latitude: parseFloat(data[0].latitude),
+            longitude: parseFloat(data[0].longitude),
             updated: data[0].updated, 
             created: data[0].created })
     return result;
@@ -71,5 +84,17 @@ const searchUnits =async (startDate: Date, endDate: Date, term: string, noOfGues
     
 }
 
+const getUserIds = async () => {
+    const data = await unitRepository.getUserIds();
+    let result: any [] = [];
 
-export default { getAllUnits, getUnitByID, addUnit, updateUnit, deleteUnit, searchUnits}
+    data.forEach((unit: any) => {
+        result.push({
+            user_id: unit.user_id
+        })
+    });
+    return result;
+}
+
+
+export default { getAllUnits, getUnitByID, addUnit, updateUnit, deleteUnit, searchUnits, getUserIds}

@@ -6,7 +6,8 @@ const unitRouter = express.Router();
 unitRouter.route('/')
                      .get(unitController.getAllUnits)
                      .post(unitController.addUnit)
-
+                     .get(unitController.getUserIds)               
+                     
 unitRouter.route('/search')
                       .get(unitController.searchUnits)
 
